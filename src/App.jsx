@@ -275,7 +275,7 @@ const Booking = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
     const text = `Hi Fab! I'm ${name}. ${message}`
-    window.open(`https://wa.me/FABIAN_NUMBER_HERE?text=${encodeURIComponent(text)}`, '_blank')
+    window.open(`https://wa.me/6598778027?text=${encodeURIComponent(text)}`, '_blank')
   }
 
   return (
