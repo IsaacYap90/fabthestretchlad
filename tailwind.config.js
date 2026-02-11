@@ -4,11 +4,11 @@ export default {
   theme: {
     extend: {
       colors: {
-        'brand': '#1a8f6e',
-        'brand-dark': '#0d1b2a',
-        'brand-light': '#e0f5ee',
-        'accent': '#f4a261',
-        'warm': '#faf5f0',
+        'brand': '#dc2626',
+        'brand-dark': '#0a0a0a',
+        'brand-light': '#fecaca',
+        'accent': '#dc2626',
+        'warm': '#ffffff',
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif'],

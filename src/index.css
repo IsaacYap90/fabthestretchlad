@@ -7,7 +7,7 @@
 @layer base {
   html { scroll-behavior: smooth; }
   body {
-    @apply bg-warm text-brand-dark antialiased;
+    @apply bg-white text-neutral-950 antialiased;
     font-family: 'Inter', sans-serif;
   }
 }
