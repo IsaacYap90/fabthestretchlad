@@ -177,7 +177,7 @@ const AboutFab = () => (
       <div className="grid md:grid-cols-2 gap-12 items-center">
         {/* About Image */}
         <div className="aspect-square rounded-3xl border border-white/10 overflow-hidden">
-          <img src="/images/fab-hero.jpg" alt="Fabian — The Stretch Lad" className="w-full h-full object-cover" />
+          <img src="/images/fab-about.jpg" alt="Fabian — The Stretch Lad" className="w-full h-full object-cover object-top" />
         </div>
 
         <div>
