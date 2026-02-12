@@ -230,6 +230,7 @@ const Booking = () => {
   })
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
+  const [bookingId, setBookingId] = useState('')
   const [error, setError] = useState('')
 
   const handleChange = (e) => {
@@ -254,8 +255,11 @@ const Booking = () => {
         preferred_time: form.preferred_time || null,
         issue_area: form.issue_area || null,
       }
-      const { error: insertError } = await supabase.from('fab_bookings').insert(bookingData)
+      const { data: insertData, error: insertError } = await supabase.from('fab_bookings').insert(bookingData).select('id').single()
       if (insertError) throw insertError
+
+      const rowId = insertData?.id || ''
+      setBookingId(rowId)
 
       // Trigger instant Telegram notification
       fetch('/api/notify', {
@@ -263,6 +267,15 @@ const Booking = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ record: { ...bookingData, status: 'pending' } }),
       }).catch(() => {})
+
+      // Send confirmation email
+      if (bookingData.email) {
+        fetch('/api/send-confirmation', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ...bookingData, id: rowId }),
+        }).catch(() => {})
+      }
 
       setSubmitted(true)
     } catch (err) {
@@ -275,7 +288,37 @@ const Booking = () => {
   const inputClass = "w-full bg-white/5 border border-white/10 focus:border-red-600/50 rounded-xl px-4 py-3 text-white text-sm placeholder:text-neutral-600 outline-none transition-colors [color-scheme:dark]"
   const labelClass = "text-neutral-400 text-xs uppercase tracking-widest font-semibold mb-2 block"
 
+  const generateICS = () => {
+    const date = (form.preferred_date || '').replace(/-/g, '')
+    const time = form.preferred_time || ''
+    const startMatch = time.match(/^(\d{2}):(\d{2})/)
+    const endMatch = time.match(/(\d{2}):(\d{2})$/)
+    let dtStart = date + 'T090000'
+    let dtEnd = date + 'T100000'
+    if (startMatch) dtStart = date + `T${startMatch[1]}${startMatch[2]}00`
+    if (endMatch) dtEnd = date + `T${endMatch[1]}${endMatch[2]}00`
+    const ics = [
+      'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//FabTheStretchLad//Booking//EN',
+      'BEGIN:VEVENT', `UID:${bookingId}@fabthestretchlad.com`,
+      `DTSTART:${dtStart}`, `DTEND:${dtEnd}`,
+      'SUMMARY:Stretch Session with Fab',
+      'LOCATION:Singapore (Mobile)',
+      `DESCRIPTION:Issue: ${form.issue_area || 'General'}\\n${(form.description || '').replace(/\n/g, '\\n')}`,
+      'STATUS:CONFIRMED', 'END:VEVENT', 'END:VCALENDAR',
+    ].join('\r\n')
+    const blob = new Blob([ics], { type: 'text/calendar' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url; a.download = 'fab-stretch-booking.ics'; a.click()
+    URL.revokeObjectURL(url)
+  }
+
   if (submitted) {
+    const refId = bookingId.substring(0, 8).toUpperCase()
+    const dateFormatted = form.preferred_date
+      ? new Date(form.preferred_date + 'T00:00:00').toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
+      : 'To be confirmed'
+
     return (
       <section id="book" className="py-24 bg-neutral-950 relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(220,38,38,0.1)_0%,_transparent_60%)]" />
@@ -283,14 +326,50 @@ const Booking = () => {
           <div className="w-16 h-16 mx-auto mb-6 border-2 border-red-600 rounded-full flex items-center justify-center">
             <span className="text-red-600 text-2xl">✓</span>
           </div>
-          <h2 className="text-3xl font-black text-white mb-4">Booking Received!</h2>
-          <p className="text-neutral-400">Thank you, {form.name}. Fab will get back to you to confirm your session.</p>
-          <a href={`${WHATSAPP_URL}?text=${encodeURIComponent(`Hi Fab! I just booked a session online. My name is ${form.name}.`)}`}
-            target="_blank"
-            className="inline-flex items-center gap-2 mt-6 px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-full transition-all text-sm"
-          >
-            💬 Message Fab on WhatsApp
-          </a>
+          <h2 className="text-3xl font-black text-white mb-2">Booking Confirmed!</h2>
+          {refId && <p className="text-red-600 font-mono text-sm tracking-wider mb-6">Reference: #{refId}</p>}
+
+          <div className="bg-white/5 border border-white/10 rounded-2xl p-6 mb-6 text-left space-y-3">
+            <div className="flex justify-between border-b border-white/10 pb-2">
+              <span className="text-neutral-500 text-sm">📅 Date</span>
+              <span className="text-white text-sm font-semibold">{dateFormatted}</span>
+            </div>
+            <div className="flex justify-between border-b border-white/10 pb-2">
+              <span className="text-neutral-500 text-sm">⏰ Time</span>
+              <span className="text-white text-sm font-semibold">{form.preferred_time || 'To be confirmed'}</span>
+            </div>
+            {form.issue_area && (
+              <div className="flex justify-between border-b border-white/10 pb-2">
+                <span className="text-neutral-500 text-sm">🎯 Issue Area</span>
+                <span className="text-white text-sm font-semibold">{form.issue_area}</span>
+              </div>
+            )}
+            <div className="flex justify-between">
+              <span className="text-neutral-500 text-sm">✏️ Details</span>
+              <span className="text-white text-sm font-semibold max-w-[200px] text-right">{form.description.substring(0, 60)}{form.description.length > 60 ? '...' : ''}</span>
+            </div>
+          </div>
+
+          <p className="text-neutral-400 mb-6">
+            You'll hear from Fab within <strong className="text-white">24 hours</strong> to confirm your session.
+          </p>
+
+          <div className="flex flex-wrap items-center justify-center gap-4">
+            {form.preferred_date && (
+              <button
+                onClick={generateICS}
+                className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 hover:bg-white/20 text-white font-bold rounded-full transition-all text-sm"
+              >
+                📅 Add to Calendar
+              </button>
+            )}
+            <a href={`${WHATSAPP_URL}?text=${encodeURIComponent(`Hi Fab! I just booked a session online. My name is ${form.name}.`)}`}
+              target="_blank"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-full transition-all text-sm"
+            >
+              💬 Message Fab on WhatsApp
+            </a>
+          </div>
         </div>
       </section>
     )
