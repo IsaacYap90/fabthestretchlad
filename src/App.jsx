@@ -4,18 +4,18 @@ const WHATSAPP_URL = 'https://wa.me/6598778027'
 
 /* ─── NAV ─── */
 const Nav = () => (
-  <nav className="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-neutral-200">
+  <nav className="fixed top-0 w-full z-50 bg-[#0a0a0a]/95 backdrop-blur-md border-b border-white/10">
     <div className="container mx-auto px-6 py-4 flex items-center justify-between">
       <a href="#" className="flex items-center gap-2">
         <span className="text-2xl">💆</span>
         <div className="leading-tight">
-          <span className="font-black text-neutral-950 text-base">FAB</span>
-          <span className="text-red-600 text-[10px] font-semibold uppercase tracking-[0.15em] block">The Stretch Lad</span>
+          <span className="font-black text-red-600 text-3xl tracking-tight">FAB</span>
+          <span className="text-gray-400 text-[10px] font-semibold uppercase tracking-[0.15em] block">The Stretch Lad</span>
         </div>
       </a>
       <div className="hidden md:flex items-center gap-8 text-sm">
-        <a href="#benefits" className="text-neutral-500 hover:text-red-600 transition-colors">Benefits</a>
-        <a href="#about" className="text-neutral-500 hover:text-red-600 transition-colors">About</a>
+        <a href="#benefits" className="text-gray-400 hover:text-red-600 transition-colors">Benefits</a>
+        <a href="#about" className="text-gray-400 hover:text-red-600 transition-colors">About</a>
         <a href="#book" className="px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-full transition-all text-xs uppercase tracking-wider">
           Book Now
         </a>
@@ -26,7 +26,7 @@ const Nav = () => (
 
 /* ─── HERO ─── */
 const Hero = () => (
-  <section className="min-h-screen flex items-center pt-20 bg-white relative overflow-hidden">
+  <section className="min-h-screen flex items-center pt-20 bg-[#0a0a0a] relative overflow-hidden">
     {/* Subtle bg shapes */}
     <div className="absolute top-20 right-0 w-[500px] h-[500px] bg-red-600/5 rounded-full blur-[100px]" />
     <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-red-600/5 rounded-full blur-[100px]" />
@@ -40,21 +40,21 @@ const Hero = () => (
             <span className="text-red-600 text-xs font-semibold uppercase tracking-widest">Now Booking</span>
           </div>
 
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-black leading-[1.05] text-neutral-950 mb-6">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-black leading-[1.05] text-white mb-6">
             Your Body<br />
             <span className="text-red-600">Deserves to</span><br />
             Move Freely.
           </h1>
 
-          <p className="text-neutral-500 text-lg leading-relaxed mb-8 max-w-md">
-            Professional stretch & mobility therapy for <span className="text-neutral-950 font-semibold">everyone</span> — athletes, office workers, weekend warriors, and anyone who wants to feel better in their body.
+          <p className="text-gray-400 text-lg leading-relaxed mb-8 max-w-md">
+            Professional stretch & mobility therapy for <span className="text-white font-semibold">everyone</span> — athletes, office workers, weekend warriors, and anyone who wants to feel better in their body.
           </p>
 
           <div className="flex flex-wrap gap-4 mb-8">
-            <a href="#book" className="px-7 py-3.5 bg-red-600 hover:bg-red-700 text-white font-bold rounded-full transition-all shadow-lg shadow-red-600/20">
+            <a href="#book" className="px-7 py-3.5 bg-red-600 hover:bg-red-700 text-white font-bold rounded-full transition-all shadow-lg shadow-red-600/10">
               Book Your Session →
             </a>
-            <a href="#consult" className="px-7 py-3.5 border border-neutral-300 hover:border-red-600 text-neutral-950 font-semibold rounded-full transition-all">
+            <a href="#consult" className="px-7 py-3.5 border border-white/10 hover:border-red-600 text-white font-semibold rounded-full transition-all">
               Free Consultation
             </a>
           </div>
@@ -63,28 +63,28 @@ const Hero = () => (
           <div className="flex items-center gap-3">
             <div className="flex -space-x-2">
               {['🏋️', '🧘', '🏃', '💼'].map((e, i) => (
-                <div key={i} className="w-8 h-8 rounded-full bg-red-100 border-2 border-white flex items-center justify-center text-sm">{e}</div>
+                <div key={i} className="w-8 h-8 rounded-full bg-red-600/20 border-2 border-[#0a0a0a] flex items-center justify-center text-sm">{e}</div>
               ))}
             </div>
-            <p className="text-neutral-500 text-sm">
-              <span className="text-neutral-950 font-semibold">30+ active clients</span> trust Fab monthly
+            <p className="text-gray-400 text-sm">
+              <span className="text-white font-semibold">30+ active clients</span> trust Fab monthly
             </p>
           </div>
         </div>
 
         {/* Right — Image placeholder */}
         <div className="relative">
-          <div className="aspect-[3/4] bg-gradient-to-br from-red-600/10 to-neutral-200/50 rounded-3xl border border-neutral-200 flex items-center justify-center">
+          <div className="aspect-[3/4] bg-gradient-to-br from-red-600/10 to-white/5 rounded-3xl border border-white/10 flex items-center justify-center">
             <div className="text-center p-8">
               <span className="text-6xl mb-4 block">🤸</span>
-              <p className="text-neutral-400 text-sm font-medium">Fabian's hero photo here</p>
-              <p className="text-neutral-300 text-xs mt-1">Action shot of stretch session</p>
+              <p className="text-gray-400 text-sm font-medium">Fabian's hero photo here</p>
+              <p className="text-gray-600 text-xs mt-1">Action shot of stretch session</p>
             </div>
           </div>
           {/* Floating badge */}
-          <div className="absolute -bottom-4 -left-4 bg-white rounded-2xl shadow-xl p-4 border border-neutral-200">
+          <div className="absolute -bottom-4 -left-4 bg-[#1a1a1a] rounded-2xl shadow-xl p-4 border border-white/10">
             <p className="text-red-600 font-black text-2xl">RMT</p>
-            <p className="text-neutral-500 text-xs">Registered Massage<br/>Therapist</p>
+            <p className="text-gray-400 text-xs">Registered Massage<br/>Therapist</p>
           </div>
         </div>
       </div>
@@ -102,20 +102,20 @@ const audiences = [
 ]
 
 const Benefits = () => (
-  <section id="benefits" className="py-24 bg-neutral-50">
+  <section id="benefits" className="py-24 bg-[#111111]">
     <div className="container mx-auto px-6 max-w-6xl">
       <div className="text-center mb-16">
-        <h2 className="text-3xl md:text-4xl font-black text-neutral-950 mb-3">Who Is This For?</h2>
+        <h2 className="text-3xl md:text-4xl font-black text-white mb-3">Who Is This For?</h2>
         <div className="w-12 h-1 bg-red-600 rounded-full mx-auto mb-4" />
-        <p className="text-neutral-500 text-lg max-w-lg mx-auto">Everyone needs to stretch. Here's why people come to Fab.</p>
+        <p className="text-gray-400 text-lg max-w-lg mx-auto">Everyone needs to stretch. Here's why people come to Fab.</p>
       </div>
 
       <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
         {audiences.map((a, i) => (
-          <div key={i} className={`group bg-white border border-neutral-200 hover:border-red-600/30 rounded-2xl p-7 transition-all duration-300 hover:shadow-lg hover:shadow-red-600/5 ${i >= 3 ? 'sm:col-span-1 md:col-span-1' : ''}`}>
+          <div key={i} className={`group bg-[#1a1a1a] border border-white/10 hover:border-red-600/30 rounded-2xl p-7 transition-all duration-300 hover:shadow-lg hover:shadow-red-600/5 ${i >= 3 ? 'sm:col-span-1 md:col-span-1' : ''}`}>
             <div className="text-3xl mb-4">{a.emoji}</div>
-            <h3 className="text-lg font-bold text-neutral-950 mb-2">{a.title}</h3>
-            <p className="text-neutral-500 text-sm leading-relaxed">{a.desc}</p>
+            <h3 className="text-lg font-bold text-white mb-2">{a.title}</h3>
+            <p className="text-gray-400 text-sm leading-relaxed">{a.desc}</p>
           </div>
         ))}
       </div>
@@ -132,10 +132,10 @@ const steps = [
 ]
 
 const HowItWorks = () => (
-  <section className="py-24 bg-white">
+  <section className="py-24 bg-[#0a0a0a]">
     <div className="container mx-auto px-6 max-w-5xl">
       <div className="text-center mb-16">
-        <h2 className="text-3xl md:text-4xl font-black text-neutral-950 mb-3">How It Works</h2>
+        <h2 className="text-3xl md:text-4xl font-black text-white mb-3">How It Works</h2>
         <div className="w-12 h-1 bg-red-600 rounded-full mx-auto" />
       </div>
 
@@ -145,8 +145,8 @@ const HowItWorks = () => (
             <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-red-600/10 flex items-center justify-center">
               <span className="text-red-600 font-black text-lg">{s.num}</span>
             </div>
-            <h3 className="font-bold text-neutral-950 mb-2">{s.title}</h3>
-            <p className="text-neutral-500 text-sm leading-relaxed">{s.desc}</p>
+            <h3 className="font-bold text-white mb-2">{s.title}</h3>
+            <p className="text-gray-400 text-sm leading-relaxed">{s.desc}</p>
           </div>
         ))}
       </div>
@@ -165,7 +165,7 @@ const ConsultationCTA = () => (
       <a
         href={`${WHATSAPP_URL}?text=${encodeURIComponent("Hi Fab! I'd like to book a free consultation.")}`}
         target="_blank"
-        className="inline-flex items-center gap-2 px-8 py-4 bg-red-600 hover:bg-red-700 text-white font-bold rounded-full transition-all shadow-lg shadow-red-600/20 text-lg"
+        className="inline-flex items-center gap-2 px-8 py-4 bg-red-600 hover:bg-red-700 text-white font-bold rounded-full transition-all shadow-lg shadow-red-600/10 text-lg"
       >
         Consult Fab via WhatsApp →
       </a>
@@ -175,25 +175,25 @@ const ConsultationCTA = () => (
 
 /* ─── ABOUT FAB ─── */
 const AboutFab = () => (
-  <section id="about" className="py-24 bg-neutral-50">
+  <section id="about" className="py-24 bg-[#111111]">
     <div className="container mx-auto px-6 max-w-5xl">
       <div className="grid md:grid-cols-2 gap-12 items-center">
         {/* Image placeholder */}
-        <div className="aspect-square bg-gradient-to-br from-red-600/10 to-neutral-200/50 rounded-3xl border border-neutral-200 flex items-center justify-center">
+        <div className="aspect-square bg-gradient-to-br from-red-600/10 to-white/5 rounded-3xl border border-white/10 flex items-center justify-center">
           <div className="text-center p-8">
             <span className="text-6xl mb-4 block">💪</span>
-            <p className="text-neutral-400 text-sm font-medium">Fabian's portrait here</p>
+            <p className="text-gray-400 text-sm font-medium">Fabian's portrait here</p>
           </div>
         </div>
 
         <div>
-          <h2 className="text-3xl md:text-4xl font-black text-neutral-950 mb-2">Meet Fab.</h2>
+          <h2 className="text-3xl md:text-4xl font-black text-white mb-2">Meet Fab.</h2>
           <div className="w-12 h-1 bg-red-600 rounded-full mb-6" />
-          <p className="text-neutral-500 text-base leading-relaxed mb-4">
-            <span className="text-neutral-950 font-semibold">Fabian Lloyd</span> is a Registered Massage Therapist (RMT) and mobility specialist. Known as <span className="text-red-600 font-semibold">"The Stretch Lad"</span>, he's the go-to therapist for combat sport athletes and everyday movers alike.
+          <p className="text-gray-400 text-base leading-relaxed mb-4">
+            <span className="text-white font-semibold">Fabian Lloyd</span> is a Registered Massage Therapist (RMT) and mobility specialist. Known as <span className="text-red-600 font-semibold">"The Stretch Lad"</span>, he's the go-to therapist for combat sport athletes and everyday movers alike.
           </p>
-          <p className="text-neutral-500 text-base leading-relaxed mb-6">
-            With a client-first approach and deep knowledge of the muscular system, Fab doesn't just stretch you — he helps you <span className="text-neutral-950 font-semibold">move better, perform better, and live better</span>.
+          <p className="text-gray-400 text-base leading-relaxed mb-6">
+            With a client-first approach and deep knowledge of the muscular system, Fab doesn't just stretch you — he helps you <span className="text-white font-semibold">move better, perform better, and live better</span>.
           </p>
 
           <div className="space-y-3">
@@ -205,7 +205,7 @@ const AboutFab = () => (
             ].map((item, i) => (
               <div key={i} className="flex items-center gap-3">
                 <span className="w-5 h-5 rounded-full bg-red-600/10 flex items-center justify-center text-red-600 text-xs">✓</span>
-                <span className="text-neutral-600 text-sm">{item}</span>
+                <span className="text-gray-400 text-sm">{item}</span>
               </div>
             ))}
           </div>
@@ -285,7 +285,7 @@ const Booking = () => {
             </div>
             <button
               type="submit"
-              className="w-full py-3.5 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-red-600/20"
+              className="w-full py-3.5 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-red-600/10"
             >
               💬 Book via WhatsApp
             </button>
@@ -303,7 +303,7 @@ const Booking = () => {
 /* ─── APP ─── */
 function App() {
   return (
-    <div className="bg-white min-h-screen text-neutral-950 font-sans selection:bg-red-600/20">
+    <div className="bg-[#0a0a0a] min-h-screen text-white font-sans selection:bg-red-600/20">
       <Nav />
       <Hero />
       <Benefits />
