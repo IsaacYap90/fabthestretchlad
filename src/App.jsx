@@ -191,17 +191,18 @@ const AboutFab = () => (
           <h2 className="text-3xl md:text-4xl font-black text-white mb-2">Meet Fab.</h2>
           <div className="w-12 h-1 bg-red-600 rounded-full mb-6" />
           <p className="text-gray-400 text-base leading-relaxed mb-4">
-            <span className="text-white font-semibold">Fabian Lloyd</span> is a Registered Massage Therapist (RMT) and mobility specialist. Known as <span className="text-red-600 font-semibold">"The Stretch Lad"</span>, he's the go-to therapist for combat sport athletes and everyday movers alike.
+            <span className="text-white font-semibold">Fabian</span> is a stretch trainer, sports massage therapist and mobility coach with a passion for helping people achieve their optimal physical performance. Known as <span className="text-red-600 font-semibold">"The Stretch Lad"</span>, he's worked with <span className="text-white font-semibold">ONE Championship athletes and title contenders, National athletes, Youth athletes</span> and everyday individuals.
           </p>
           <p className="text-gray-400 text-base leading-relaxed mb-6">
-            With a client-first approach and deep knowledge of the muscular system, Fab doesn't just stretch you — he helps you <span className="text-white font-semibold">move better, perform better, and live better</span>.
+            With a strong foundation in anatomy and physiology, Fab brings a scientific, evidence-based approach to training. His individualized programs address specific areas of tightness or weakness, incorporating dynamic stretching techniques to <span className="text-white font-semibold">improve range of motion and prevent injuries</span>.
           </p>
 
           <div className="space-y-3">
             {[
-              'Registered Massage Therapist (RMT)',
-              'Combat Sport Specialist',
-              'Mobility & Stretch Therapy Expert',
+              'ONE Championship Athlete Specialist',
+              'Sports Massage Therapist',
+              'Mobility & Stretch Coaching',
+              'Evidence-Based, Individualized Programs',
               'Trusted by 30+ Active Clients Monthly',
             ].map((item, i) => (
               <div key={i} className="flex items-center gap-3">
