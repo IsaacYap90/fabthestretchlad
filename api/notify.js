@@ -1,10 +1,10 @@
 // Vercel Serverless Function — sends Telegram notification for Fab bookings
 // Endpoint: POST /api/notify
 
-const FAB_BOT_TOKEN = "8289898756:AAFc6I-BC65qA0hOL_9yjJ-xQS1__19fufU";
-const ISAAC_CHAT_ID = "1729085064";
+const FAB_BOT_TOKEN = process.env.FAB_BOT_TOKEN;
+const ISAAC_CHAT_ID = process.env.ISAAC_CHAT_ID || "1729085064";
 // Fab's chat ID will be added once he /starts the bot
-// const FAB_CHAT_ID = "";
+// const FAB_CHAT_ID = process.env.FAB_CHAT_ID || "";
 
 async function sendTelegram(chatId, text) {
   await fetch(`https://api.telegram.org/bot${FAB_BOT_TOKEN}/sendMessage`, {
@@ -17,6 +17,10 @@ async function sendTelegram(chatId, text) {
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
+  }
+
+  if (!FAB_BOT_TOKEN) {
+    return res.status(500).json({ error: "Bot token not configured" });
   }
 
   try {
