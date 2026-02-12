@@ -3,8 +3,7 @@
 
 const FAB_BOT_TOKEN = process.env.FAB_BOT_TOKEN;
 const ISAAC_CHAT_ID = process.env.ISAAC_CHAT_ID || "1729085064";
-// Fab's chat ID will be added once he /starts the bot
-// const FAB_CHAT_ID = process.env.FAB_CHAT_ID || "";
+const FAB_CHAT_ID = process.env.FAB_CHAT_ID || "731269684";
 
 async function sendTelegram(chatId, text) {
   await fetch(`https://api.telegram.org/bot${FAB_BOT_TOKEN}/sendMessage`, {
@@ -50,8 +49,8 @@ export default async function handler(req, res) {
     // Send to Isaac
     await sendTelegram(ISAAC_CHAT_ID, msg);
     
-    // TODO: Send to Fab once he activates the bot
-    // if (FAB_CHAT_ID) await sendTelegram(FAB_CHAT_ID, msg);
+    // Send to Fab
+    await sendTelegram(FAB_CHAT_ID, msg);
 
     return res.status(200).json({ ok: true });
   } catch (err) {
