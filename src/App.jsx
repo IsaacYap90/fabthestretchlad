@@ -272,7 +272,7 @@ const Booking = () => {
     }
   }
 
-  const inputClass = "w-full bg-white/5 border border-white/10 focus:border-red-600/50 rounded-xl px-4 py-3 text-white text-sm placeholder:text-neutral-600 outline-none transition-colors"
+  const inputClass = "w-full bg-white/5 border border-white/10 focus:border-red-600/50 rounded-xl px-4 py-3 text-white text-sm placeholder:text-neutral-600 outline-none transition-colors [color-scheme:dark]"
   const labelClass = "text-neutral-400 text-xs uppercase tracking-widest font-semibold mb-2 block"
 
   if (submitted) {
