@@ -294,7 +294,8 @@ const Booking = () => {
         </div>
 
         <div className="pt-12 mt-12 border-t border-white/10 text-center">
-          <p className="text-neutral-600 text-xs">© 2026 Fab The Stretch Lad. All rights reserved. Built by <a href="https://isaacyap.ai" target="_blank" className="text-red-500 hover:underline">IsaacYap.ai</a></p>
+          <p className="text-neutral-600 text-xs">© 2026 Fab The Stretch Lad. All rights reserved.</p>
+          <p className="text-neutral-500 text-xs mt-2">Built with ❤️ by <a href="https://isaacyap.ai" target="_blank" rel="noopener noreferrer" className="hover:text-red-600 transition-colors">isaacyap.ai</a></p>
         </div>
       </div>
     </section>
