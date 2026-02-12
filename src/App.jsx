@@ -217,14 +217,89 @@ const AboutFab = () => (
 )
 
 /* ─── CTA / BOOKING ─── */
-const Booking = () => {
-  const [name, setName] = useState('')
-  const [message, setMessage] = useState('')
+const TIME_SLOTS = [
+  '09:00 - 10:00', '10:00 - 11:00', '11:00 - 12:00',
+  '12:00 - 13:00', '13:00 - 14:00', '14:00 - 15:00',
+  '15:00 - 16:00', '16:00 - 17:00', '17:00 - 18:00',
+  '18:00 - 19:00', '19:00 - 20:00', '20:00 - 21:00',
+]
 
-  const handleSubmit = (e) => {
+const ISSUE_AREAS = [
+  'Neck & Shoulders', 'Upper Back', 'Lower Back', 'Hips & Glutes',
+  'Hamstrings', 'Full Body', 'Sports Recovery', 'Posture Correction', 'Other',
+]
+
+const Booking = () => {
+  const [form, setForm] = useState({
+    name: '', email: '', phone: '', telegram: '', instagram: '',
+    description: '', preferred_date: '', preferred_time: '', issue_area: '',
+  })
+  const [submitting, setSubmitting] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
+  const [error, setError] = useState('')
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value })
+  }
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    const text = `Hi Fab! I'm ${name}. ${message}`
-    window.open(`${WHATSAPP_URL}?text=${encodeURIComponent(text)}`, '_blank')
+    setSubmitting(true)
+    setError('')
+
+    try {
+      const { supabase } = await import('./lib/supabase.js')
+      const bookingData = {
+        name: form.name,
+        email: form.email || null,
+        phone: form.phone || null,
+        telegram: form.telegram || null,
+        instagram: form.instagram || null,
+        description: form.description,
+        preferred_date: form.preferred_date || null,
+        preferred_time: form.preferred_time || null,
+        issue_area: form.issue_area || null,
+      }
+      const { error: insertError } = await supabase.from('fab_bookings').insert(bookingData)
+      if (insertError) throw insertError
+
+      // Trigger instant Telegram notification
+      fetch('/api/notify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ record: { ...bookingData, status: 'pending' } }),
+      }).catch(() => {})
+
+      setSubmitted(true)
+    } catch (err) {
+      setError(err?.message || 'Something went wrong. Please try again.')
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  const inputClass = "w-full bg-white/5 border border-white/10 focus:border-red-600/50 rounded-xl px-4 py-3 text-white text-sm placeholder:text-neutral-600 outline-none transition-colors"
+  const labelClass = "text-neutral-400 text-xs uppercase tracking-widest font-semibold mb-2 block"
+
+  if (submitted) {
+    return (
+      <section id="book" className="py-24 bg-neutral-950 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(220,38,38,0.1)_0%,_transparent_60%)]" />
+        <div className="container mx-auto px-6 max-w-2xl relative z-10 text-center">
+          <div className="w-16 h-16 mx-auto mb-6 border-2 border-red-600 rounded-full flex items-center justify-center">
+            <span className="text-red-600 text-2xl">✓</span>
+          </div>
+          <h2 className="text-3xl font-black text-white mb-4">Booking Received!</h2>
+          <p className="text-neutral-400">Thank you, {form.name}. Fab will get back to you to confirm your session.</p>
+          <a href={`${WHATSAPP_URL}?text=${encodeURIComponent(`Hi Fab! I just booked a session online. My name is ${form.name}.`)}`}
+            target="_blank"
+            className="inline-flex items-center gap-2 mt-6 px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-full transition-all text-sm"
+          >
+            💬 Message Fab on WhatsApp
+          </a>
+        </div>
+      </section>
+    )
   }
 
   return (
@@ -261,34 +336,62 @@ const Booking = () => {
           </div>
 
           {/* Right — Form */}
-          <form onSubmit={handleSubmit} className="bg-white/5 backdrop-blur border border-white/10 rounded-2xl p-7 space-y-5">
+          <form onSubmit={handleSubmit} className="bg-white/5 backdrop-blur border border-white/10 rounded-2xl p-7 space-y-4">
             <div>
-              <label className="text-neutral-400 text-xs uppercase tracking-widest font-semibold mb-2 block">Your Name</label>
-              <input
-                type="text"
-                required
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Jane Doe"
-                className="w-full bg-white/5 border border-white/10 focus:border-red-600/50 rounded-xl px-4 py-3 text-white text-sm placeholder:text-neutral-600 outline-none transition-colors"
-              />
+              <label className={labelClass}>Your Name *</label>
+              <input type="text" name="name" required value={form.name} onChange={handleChange} placeholder="Jane Doe" className={inputClass} />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className={labelClass}>Phone</label>
+                <input type="tel" name="phone" value={form.phone} onChange={handleChange} placeholder="+65 9xxx xxxx" className={inputClass} />
+              </div>
+              <div>
+                <label className={labelClass}>Email</label>
+                <input type="email" name="email" value={form.email} onChange={handleChange} placeholder="you@email.com" className={inputClass} />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className={labelClass}>Telegram</label>
+                <input type="text" name="telegram" value={form.telegram} onChange={handleChange} placeholder="@handle" className={inputClass} />
+              </div>
+              <div>
+                <label className={labelClass}>Instagram</label>
+                <input type="text" name="instagram" value={form.instagram} onChange={handleChange} placeholder="@handle" className={inputClass} />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className={labelClass}>Preferred Date</label>
+                <input type="date" name="preferred_date" value={form.preferred_date} onChange={handleChange} className={inputClass} />
+              </div>
+              <div>
+                <label className={labelClass}>Preferred Time</label>
+                <select name="preferred_time" value={form.preferred_time} onChange={handleChange} className={inputClass}>
+                  <option value="">Select time</option>
+                  {TIME_SLOTS.map(s => <option key={s} value={s}>{s}</option>)}
+                </select>
+              </div>
             </div>
             <div>
-              <label className="text-neutral-400 text-xs uppercase tracking-widest font-semibold mb-2 block">Message</label>
-              <textarea
-                required
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                placeholder="I'd like to book a trial session..."
-                rows={4}
-                className="w-full bg-white/5 border border-white/10 focus:border-red-600/50 rounded-xl px-4 py-3 text-white text-sm placeholder:text-neutral-600 outline-none transition-colors resize-none"
-              />
+              <label className={labelClass}>Issue Area</label>
+              <select name="issue_area" value={form.issue_area} onChange={handleChange} className={inputClass}>
+                <option value="">What needs work?</option>
+                {ISSUE_AREAS.map(a => <option key={a} value={a}>{a}</option>)}
+              </select>
             </div>
-            <button
-              type="submit"
-              className="w-full py-3.5 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-red-600/10"
+            <div>
+              <label className={labelClass}>Tell Fab about your issue *</label>
+              <textarea name="description" required value={form.description} onChange={handleChange}
+                placeholder="E.g. I sit at a desk 8 hours/day and my lower back is killing me..."
+                rows={3} className={`${inputClass} resize-none`} />
+            </div>
+            {error && <p className="text-red-500 text-sm">{error}</p>}
+            <button type="submit" disabled={submitting}
+              className="w-full py-3.5 bg-red-600 hover:bg-red-700 disabled:bg-red-600/50 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-red-600/10"
             >
-              💬 Book via WhatsApp
+              {submitting ? 'Submitting...' : '📋 Book Your Session'}
             </button>
           </form>
         </div>
