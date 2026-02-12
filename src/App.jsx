@@ -72,14 +72,10 @@ const Hero = () => (
           </div>
         </div>
 
-        {/* Right — Image placeholder */}
+        {/* Right — Hero Image */}
         <div className="relative">
-          <div className="aspect-[3/4] bg-gradient-to-br from-red-600/10 to-white/5 rounded-3xl border border-white/10 flex items-center justify-center">
-            <div className="text-center p-8">
-              <span className="text-6xl mb-4 block">🤸</span>
-              <p className="text-gray-400 text-sm font-medium">Fabian's hero photo here</p>
-              <p className="text-gray-600 text-xs mt-1">Action shot of stretch session</p>
-            </div>
+          <div className="aspect-[3/4] rounded-3xl border border-white/10 overflow-hidden">
+            <img src="/images/fab-hero.jpg" alt="Fab performing assisted stretch therapy" className="w-full h-full object-cover" />
           </div>
           {/* Floating badge */}
           <div className="absolute -bottom-4 -left-4 bg-[#1a1a1a] rounded-2xl shadow-xl p-4 border border-white/10">
@@ -179,12 +175,9 @@ const AboutFab = () => (
   <section id="about" className="py-24 bg-[#111111]">
     <div className="container mx-auto px-6 max-w-5xl">
       <div className="grid md:grid-cols-2 gap-12 items-center">
-        {/* Image placeholder */}
-        <div className="aspect-square bg-gradient-to-br from-red-600/10 to-white/5 rounded-3xl border border-white/10 flex items-center justify-center">
-          <div className="text-center p-8">
-            <span className="text-6xl mb-4 block">💪</span>
-            <p className="text-gray-400 text-sm font-medium">Fabian's portrait here</p>
-          </div>
+        {/* About Image */}
+        <div className="aspect-square rounded-3xl border border-white/10 overflow-hidden">
+          <img src="/images/fab-hero.jpg" alt="Fabian — The Stretch Lad" className="w-full h-full object-cover" />
         </div>
 
         <div>
