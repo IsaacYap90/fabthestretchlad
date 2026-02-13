@@ -184,7 +184,7 @@ const AboutFab = () => (
           <h2 className="text-3xl md:text-4xl font-black text-white mb-2">Meet Fab.</h2>
           <div className="w-12 h-1 bg-red-600 rounded-full mb-6" />
           <p className="text-gray-400 text-base leading-relaxed mb-4">
-            <span className="text-white font-semibold">Fabian</span> is a stretch trainer, sports massage therapist and mobility coach with a passion for helping people achieve their optimal physical performance. Known as <span className="text-red-600 font-semibold">"The Stretch Lad"</span>, he's worked with <span className="text-white font-semibold">ONE Championship athletes, national-level competitors, youth athletes</span> and everyday individuals.
+            <span className="text-white font-semibold">Fabian</span> is a stretch trainer, sports massage therapist and mobility coach with a passion for helping people achieve their optimal physical performance. Known as <span className="text-red-600 font-semibold">"The Stretch Lad"</span>, he has worked with <span className="text-white font-semibold">ONE Championship athletes, national-level competitors, youth athletes</span> and everyday individuals.
           </p>
           <p className="text-gray-400 text-base leading-relaxed mb-6">
             With a strong foundation in anatomy and physiology, Fab brings a scientific, evidence-based approach to training. His individualized programs address specific areas of tightness or weakness, incorporating dynamic stretching techniques to <span className="text-white font-semibold">improve range of motion and prevent injuries</span>.
