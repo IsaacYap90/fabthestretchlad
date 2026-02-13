@@ -92,7 +92,7 @@ const Hero = () => (
 const audiences = [
   { emoji: '🏋️', title: 'Athletes', desc: 'Recover faster, prevent injuries, and improve range of motion for peak performance.' },
   { emoji: '💼', title: 'Office Workers', desc: 'Fix that desk posture. Release tension in your neck, back, and shoulders.' },
-  { emoji: '🧘', title: 'Active Agers', desc: 'Stay mobile and independent. Gentle stretching tailored to your body.' },
+  { emoji: '🧘', title: 'Seniors & Parents', desc: 'Stay mobile and independent. Gentle stretching tailored to your body.' },
   { emoji: '🏃', title: 'Weekend Warriors', desc: 'Train hard, recover harder. Don\'t let tightness hold you back.' },
   { emoji: '💻', title: 'Remote Workers', desc: 'Hours on the couch or bed with a laptop? Your hips and spine are paying for it.' },
   { emoji: '🎯', title: 'Everyone', desc: 'If you have a body, you need to stretch. It\'s that simple.' },
