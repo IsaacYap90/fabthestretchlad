@@ -429,10 +429,10 @@ const Booking = () => {
                 <input type="text" name="instagram" value={form.instagram} onChange={handleChange} placeholder="@handle" className={inputClass} />
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className={labelClass}>Preferred Date</label>
-                <input type="date" name="preferred_date" value={form.preferred_date} onChange={handleChange} className={inputClass} />
+                <input type="date" name="preferred_date" value={form.preferred_date} onChange={handleChange} placeholder="Select date" className={inputClass} />
               </div>
               <div>
                 <label className={labelClass}>Preferred Time</label>
