@@ -78,7 +78,7 @@ const Hero = () => (
             <img src="/images/fab-hero.jpg" alt="Fab performing assisted stretch therapy" className="w-full h-full object-cover" />
           </div>
           {/* Floating badge */}
-          <div className="absolute -bottom-4 -left-4 bg-[#1a1a1a] rounded-2xl shadow-xl p-4 border border-white/10">
+          <div className="absolute -bottom-4 left-0 bg-[#1a1a1a] rounded-2xl shadow-xl p-4 border border-white/10">
             <p className="text-red-600 font-black text-2xl">RMT</p>
             <p className="text-gray-400 text-xs">Registered Massage<br/>Therapist</p>
           </div>
