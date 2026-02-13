@@ -302,7 +302,7 @@ const Booking = () => {
       'BEGIN:VEVENT', `UID:${bookingId}@fabthestretchlad.com`,
       `DTSTART:${dtStart}`, `DTEND:${dtEnd}`,
       'SUMMARY:Stretch Session with Fab',
-      'LOCATION:Singapore (Mobile)',
+      'LOCATION:Singapore',
       `DESCRIPTION:Issue: ${form.issue_area || 'General'}\\n${(form.description || '').replace(/\n/g, '\\n')}`,
       'STATUS:CONFIRMED', 'END:VEVENT', 'END:VCALENDAR',
     ].join('\r\n')
@@ -387,12 +387,7 @@ const Booking = () => {
               Book your first session today. Your body will thank you.
             </p>
             <div className="space-y-4">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-red-600/20 flex items-center justify-center">
-                  <span className="text-base">📍</span>
-                </div>
-                <span className="text-neutral-300 text-sm">Singapore (Mobile — Fab comes to you)</span>
-              </div>
+              {/* Location removed per Fab's request */}
               <a href="https://www.instagram.com/fab.thestretchlad" target="_blank" className="flex items-center gap-3 group">
                 <div className="w-10 h-10 rounded-full bg-red-600/20 flex items-center justify-center">
                   <span className="text-base">📸</span>
