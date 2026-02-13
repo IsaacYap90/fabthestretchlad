@@ -90,12 +90,12 @@ const Hero = () => (
 
 /* ─── WHO IS THIS FOR ─── */
 const audiences = [
-  { emoji: '🏋️', title: 'Athletes', desc: 'Recover faster, prevent injuries, and improve range of motion for peak performance.' },
   { emoji: '💼', title: 'Office Workers', desc: 'Fix that desk posture. Release tension in your neck, back, and shoulders.' },
+  { emoji: '💻', title: 'Remote Workers', desc: 'Hours on the couch or bed with a laptop? Your hips and spine are paying for it.' },
   { emoji: '🧘', title: 'Seniors & Parents', desc: 'Stay mobile and independent. Gentle stretching tailored to your body.' },
   { emoji: '🏃', title: 'Weekend Warriors', desc: 'Train hard, recover harder. Don\'t let tightness hold you back.' },
-  { emoji: '💻', title: 'Remote Workers', desc: 'Hours on the couch or bed with a laptop? Your hips and spine are paying for it.' },
   { emoji: '🎯', title: 'Everyone', desc: 'If you have a body, you need to stretch. It\'s that simple.' },
+  { emoji: '🏋️', title: 'Athletes', desc: 'Recover faster, prevent injuries, and improve range of motion for peak performance.' },
 ]
 
 const Benefits = () => (
@@ -184,7 +184,7 @@ const AboutFab = () => (
           <h2 className="text-3xl md:text-4xl font-black text-white mb-2">Meet Fab.</h2>
           <div className="w-12 h-1 bg-red-600 rounded-full mb-6" />
           <p className="text-gray-400 text-base leading-relaxed mb-4">
-            <span className="text-white font-semibold">Fabian</span> is a stretch trainer, sports massage therapist and mobility coach with a passion for helping people achieve their optimal physical performance. Known as <span className="text-red-600 font-semibold">"The Stretch Lad"</span>, he works with <span className="text-white font-semibold">ONE Championship athletes, national-level competitors, youth athletes</span> and everyday individuals.
+            <span className="text-white font-semibold">Fabian</span> is a stretch trainer, sports massage therapist and mobility coach with a passion for helping people move and feel better. Known as <span className="text-red-600 font-semibold">"The Stretch Lad"</span>, he works with <span className="text-white font-semibold">office professionals, busy parents, seniors, weekend gym-goers</span> and even ONE Championship athletes.
           </p>
           <p className="text-gray-400 text-base leading-relaxed mb-6">
             With a strong foundation in anatomy and physiology, Fab brings a scientific, evidence-based approach to training. His individualized programs address specific areas of tightness or weakness, incorporating dynamic stretching techniques to <span className="text-white font-semibold">improve range of motion and prevent injuries</span>.
@@ -192,7 +192,7 @@ const AboutFab = () => (
 
           <div className="space-y-3">
             {[
-              'ONE Championship Athlete Specialist',
+              'Trusted by ONE Championship Athletes',
               'Sports Massage Therapist',
               'Mobility & Stretch Coaching',
               'Evidence-Based, Individualized Programs',
