@@ -1,0 +1,26 @@
+# Fab The Stretch Lad
+
+## Purpose
+Stretch therapy and mobile wellness service.
+
+## Owner
+Fab
+
+## Location
+Singapore (mobile service)
+
+## Services
+- Stretch therapy
+- Mobility improvement
+- Sports recovery
+- Pain relief
+
+## Tech Stack
+- React (Vite)
+- Supabase
+
+## URL
+https://fabthestretchlad.vercel.app
+
+## Built By
+isaacyap.ai
