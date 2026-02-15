@@ -223,6 +223,55 @@ const ISSUE_AREAS = [
   'Hamstrings', 'Full Body', 'Sports Recovery', 'Posture Correction', 'Other',
 ]
 
+/* ─── SOCIAL FEEDS ─── */
+const SocialFeeds = () => (
+  <section className="py-24 bg-[#0a0a0a] relative overflow-hidden">
+    <div className="container mx-auto px-6 max-w-6xl">
+      <div className="text-center mb-12">
+        <h2 className="text-3xl md:text-4xl font-black text-white mb-3">Follow the Journey</h2>
+        <p className="text-neutral-400">Tips, client transformations, and behind-the-scenes</p>
+      </div>
+      <div className="grid md:grid-cols-2 gap-8">
+        {/* Instagram */}
+        <div>
+          <div className="flex items-center gap-2 mb-4">
+            <span className="text-xl">📸</span>
+            <span className="text-white font-bold">Instagram</span>
+            <a href="https://www.instagram.com/fab.thestretchlad" target="_blank" rel="noopener noreferrer" className="text-red-500 text-sm hover:underline ml-auto">@fab.thestretchlad →</a>
+          </div>
+          <div className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden">
+            <iframe
+              src="https://www.instagram.com/fab.thestretchlad/embed"
+              className="w-full"
+              style={{minHeight: '480px', border: 'none'}}
+              loading="lazy"
+              title="Fab Instagram"
+            />
+          </div>
+        </div>
+        {/* TikTok */}
+        <div>
+          <div className="flex items-center gap-2 mb-4">
+            <span className="text-xl">🎵</span>
+            <span className="text-white font-bold">TikTok</span>
+            <a href="https://www.tiktok.com/@fab.thestretchlad" target="_blank" rel="noopener noreferrer" className="text-red-500 text-sm hover:underline ml-auto">@fab.thestretchlad →</a>
+          </div>
+          <div className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden">
+            <iframe
+              src="https://www.tiktok.com/embed/@fab.thestretchlad"
+              className="w-full"
+              style={{minHeight: '480px', border: 'none'}}
+              loading="lazy"
+              title="Fab TikTok"
+              sandbox="allow-scripts allow-same-origin allow-popups"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+)
+
 const Booking = () => {
   const [form, setForm] = useState({
     name: '', email: '', phone: '', telegram: '', instagram: '',
@@ -483,6 +532,7 @@ function App() {
       <HowItWorks />
       <ConsultationCTA />
       <AboutFab />
+      <SocialFeeds />
       <Booking />
     </div>
   )
