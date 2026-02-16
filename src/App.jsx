@@ -12,6 +12,7 @@ import AdminDashboard from './pages/admin/Dashboard'
 import AdminClients from './pages/admin/Clients'
 import ClientDetail from './pages/admin/ClientDetail'
 import AdminSessions from './pages/admin/Sessions'
+import ChatWidget from './components/ChatWidget'
 
 const WHATSAPP_URL = 'https://wa.me/6598778027'
 
@@ -467,6 +468,7 @@ function App() {
           {/* Catch-all */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
+        <ChatWidget />
       </AuthProvider>
     </BrowserRouter>
   )
