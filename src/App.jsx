@@ -411,6 +411,7 @@ const Booking = () => {
         <div className="pt-12 mt-12 border-t border-white/10 text-center">
           <p className="text-neutral-600 text-xs">© 2026 Fab The Stretch Lad. All rights reserved.</p>
           <p className="text-neutral-500 text-xs mt-2">Developed by <a href="https://isaacyap.ai" target="_blank" rel="noopener noreferrer" className="hover:text-red-600 transition-colors">isaacyap.ai</a></p>
+          <p className="inline-flex items-center gap-1.5 mt-3 px-3 py-1 bg-white/[0.03] border border-white/10 rounded-full text-neutral-500 text-[10px] tracking-wide">🤖 AI-Powered by ChatGPT</p>
         </div>
       </div>
     </section>
