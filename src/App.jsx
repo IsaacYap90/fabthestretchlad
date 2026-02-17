@@ -21,7 +21,7 @@ const Nav = () => {
   const { user, profile, signOut } = useAuth()
 
   return (
-    <nav className="fixed top-0 w-full z-50 bg-[#0a0a0a]/95 backdrop-blur-md border-b border-white/10">
+    <nav aria-label="Main navigation" className="fixed top-0 w-full z-50 bg-[#0a0a0a]/95 backdrop-blur-md border-b border-white/10">
       <div className="container mx-auto px-6 py-4 flex items-center justify-between">
         <Link to="/" className="flex items-center">
           <span className="text-white font-black text-lg tracking-tight uppercase">FAB <span className="text-red-600">THE STRETCH LAD</span></span>
@@ -357,7 +357,7 @@ const Booking = () => {
           <p className="text-neutral-400 mb-6">You'll hear from Fab within <strong className="text-white">24 hours</strong> to confirm your session.</p>
           <div className="flex flex-wrap items-center justify-center gap-4">
             {form.preferred_date && <button onClick={generateICS} className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 hover:bg-white/20 text-white font-bold rounded-full transition-all text-sm">📅 Add to Calendar</button>}
-            <a href={`${WHATSAPP_URL}?text=${encodeURIComponent(`Hi Fab! I just booked a session online. My name is ${form.name}.`)}`} target="_blank" className="inline-flex items-center gap-2 px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-full transition-all text-sm">💬 Message Fab on WhatsApp</a>
+            <a href={`${WHATSAPP_URL}?text=${encodeURIComponent(`Hi Fab! I just booked a session online. My name is ${form.name}.`)}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-full transition-all text-sm">💬 Message Fab on WhatsApp</a>
           </div>
         </div>
       </section>
@@ -373,11 +373,11 @@ const Booking = () => {
             <h2 className="text-3xl md:text-4xl font-black text-white mb-4">Ready to Move Better?</h2>
             <p className="text-neutral-400 text-base leading-relaxed mb-8">Book your first session today. Your body will thank you.</p>
             <div className="space-y-4">
-              <a href="https://www.instagram.com/fab.thestretchlad" target="_blank" className="flex items-center gap-3 group">
+              <a href="https://www.instagram.com/fab.thestretchlad" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 group">
                 <div className="w-10 h-10 rounded-full bg-red-600/20 flex items-center justify-center"><span className="text-base">📸</span></div>
                 <span className="text-neutral-300 group-hover:text-red-500 text-sm transition-colors">@fab.thestretchlad</span>
               </a>
-              <a href="https://www.tiktok.com/@fab.thestretchlad" target="_blank" className="flex items-center gap-3 group">
+              <a href="https://www.tiktok.com/@fab.thestretchlad" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 group">
                 <div className="w-10 h-10 rounded-full bg-red-600/20 flex items-center justify-center"><span className="text-base">🎵</span></div>
                 <span className="text-neutral-300 group-hover:text-red-500 text-sm transition-colors">@fab.thestretchlad</span>
               </a>
@@ -418,7 +418,9 @@ const Booking = () => {
 /* ─── MARKETING HOME ─── */
 const HomePage = () => (
   <div className="bg-[#0a0a0a] min-h-screen text-white font-sans selection:bg-red-600/20">
+    <a href="#benefits" className="sr-only focus:not-sr-only focus:fixed focus:top-0 focus:left-0 focus:z-[60] focus:bg-red-600 focus:text-white focus:px-4 focus:py-2">Skip to content</a>
     <Nav />
+    <main>
     <Hero />
     <Benefits />
     <HowItWorks />
@@ -426,6 +428,7 @@ const HomePage = () => (
     <AboutFab />
     <SocialFeeds />
     <Booking />
+    </main>
   </div>
 )
 
