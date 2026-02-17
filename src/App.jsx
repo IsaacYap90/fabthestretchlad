@@ -24,7 +24,7 @@ const Nav = () => {
     <nav className="fixed top-0 w-full z-50 bg-[#0a0a0a]/95 backdrop-blur-md border-b border-white/10">
       <div className="container mx-auto px-6 py-4 flex items-center justify-between">
         <Link to="/" className="flex items-center">
-          <img src="/fab-logo.png" alt="Fab The Stretch Lad" className="h-10 w-auto" />
+          <span className="text-white font-black text-lg tracking-tight uppercase">FAB <span className="text-red-600">THE STRETCH LAD</span></span>
         </Link>
         <div className="hidden md:flex items-center gap-8 text-sm">
           <a href="/#benefits" className="text-gray-400 hover:text-red-600 transition-colors">Benefits</a>
