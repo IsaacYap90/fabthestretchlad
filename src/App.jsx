@@ -23,12 +23,8 @@ const Nav = () => {
   return (
     <nav className="fixed top-0 w-full z-50 bg-[#0a0a0a]/95 backdrop-blur-md border-b border-white/10">
       <div className="container mx-auto px-6 py-4 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2">
-          <span className="text-2xl">💆</span>
-          <div className="leading-tight">
-            <span className="font-black text-red-600 text-3xl tracking-tight">FAB</span>
-            <span className="text-gray-400 text-[10px] font-semibold uppercase tracking-[0.15em] block">The Stretch Lad</span>
-          </div>
+        <Link to="/" className="flex items-center">
+          <img src="/fab-logo.png" alt="Fab The Stretch Lad" className="h-10 w-auto" />
         </Link>
         <div className="hidden md:flex items-center gap-8 text-sm">
           <a href="/#benefits" className="text-gray-400 hover:text-red-600 transition-colors">Benefits</a>
