@@ -41,8 +41,9 @@ export default function ClientDetail() {
     setLoading(false)
   }, [id])
 
-  // eslint-disable-next-line react-hooks/set-state-in-effect
-  useEffect(() => { loadData() }, [loadData])
+  useEffect(() => {
+    loadData() // eslint-disable-line react-hooks/set-state-in-effect
+  }, [loadData])
 
   const handleActivate = async () => {
     if (!selectedPkg) return

@@ -31,8 +31,9 @@ export default function Progress() {
     setLoading(false)
   }, [user])
 
-  // eslint-disable-next-line react-hooks/set-state-in-effect
-  useEffect(() => { loadData() }, [loadData])
+  useEffect(() => {
+    loadData() // eslint-disable-line react-hooks/set-state-in-effect
+  }, [loadData])
 
   if (loading) return <div className="flex justify-center py-20"><div className="w-8 h-8 border-2 border-red-600 border-t-transparent rounded-full animate-spin" /></div>
 
