@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useAuth } from '../../lib/auth'
 import { supabase, isSupabaseConfigured } from '../../lib/supabase'
 import { DEMO_GAMIFICATION, DEMO_BOOKINGS } from '../../lib/demo-data'
+import { formatDateLong } from '../../lib/format'
 import Card from '../../components/ui/Card'
 import LevelBadge from '../../components/gamification/LevelBadge'
 import ProgressBar from '../../components/gamification/ProgressBar'
@@ -14,9 +15,7 @@ export default function Progress() {
   const [sessions, setSessions] = useState([])
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => { loadData() }, [user])
-
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     if (!isSupabaseConfigured()) {
       setGam(DEMO_GAMIFICATION)
       setSessions(DEMO_BOOKINGS.filter(b => b.status === 'completed'))
@@ -30,11 +29,12 @@ export default function Progress() {
     setGam(gamRes.data)
     setSessions(sessRes.data || [])
     setLoading(false)
-  }
+  }, [user])
+
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { loadData() }, [loadData])
 
   if (loading) return <div className="flex justify-center py-20"><div className="w-8 h-8 border-2 border-red-600 border-t-transparent rounded-full animate-spin" /></div>
-
-  const formatDate = (d) => new Date(d + 'T00:00:00').toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })
 
   // Pain chart data
   const painData = sessions.filter(s => s.session_logs?.[0]?.pain_level_before != null).reverse()
@@ -86,7 +86,7 @@ export default function Progress() {
                   const beforeH = (log.pain_level_before / maxPain) * 100
                   const afterH = (log.pain_level_after / maxPain) * 100
                   return (
-                    <div key={i} className="flex-1 flex gap-0.5 items-end" title={formatDate(s.date)}>
+                    <div key={i} className="flex-1 flex gap-0.5 items-end" title={formatDateLong(s.date)}>
                       <div className="flex-1 bg-red-500/60 rounded-t" style={{ height: `${beforeH}%` }} />
                       <div className="flex-1 bg-green-500/60 rounded-t" style={{ height: `${afterH}%` }} />
                     </div>
@@ -113,7 +113,7 @@ export default function Progress() {
               <Card key={s.id} className="!p-4">
                 <div className="flex items-start justify-between">
                   <div>
-                    <p className="text-white font-semibold text-sm">{formatDate(s.date)}</p>
+                    <p className="text-white font-semibold text-sm">{formatDateLong(s.date)}</p>
                     {s.session_logs?.[0] && (
                       <>
                         <div className="flex flex-wrap gap-1 mt-1">

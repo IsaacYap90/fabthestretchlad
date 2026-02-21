@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../../lib/auth'
 import { supabase, isSupabaseConfigured } from '../../lib/supabase'
 import { DEMO_PACKAGE, DEMO_GAMIFICATION, DEMO_BOOKINGS } from '../../lib/demo-data'
+import { formatDate, formatTime } from '../../lib/format'
 import Card from '../../components/ui/Card'
 import Button from '../../components/ui/Button'
 import Badge from '../../components/ui/Badge'
@@ -17,11 +18,7 @@ export default function PortalDashboard() {
   const [bookings, setBookings] = useState([])
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    loadData()
-  }, [user])
-
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     if (!isSupabaseConfigured()) {
       setPkg(DEMO_PACKAGE)
       setGam(DEMO_GAMIFICATION)
@@ -38,18 +35,21 @@ export default function PortalDashboard() {
       setPkg(pkgRes.data)
       setGam(gamRes.data)
       setBookings(bookRes.data || [])
-    } catch {}
+    } catch (err) {
+      console.error('Failed to load dashboard data:', err)
+    }
     setLoading(false)
-  }
+  }, [user])
+
+  useEffect(() => {
+    loadData() // eslint-disable-line react-hooks/set-state-in-effect
+  }, [loadData])
 
   if (loading) return <div className="flex justify-center py-20"><div className="w-8 h-8 border-2 border-red-600 border-t-transparent rounded-full animate-spin" /></div>
 
   const nextSession = bookings.find(b => b.status === 'confirmed')
   const completed = bookings.filter(b => b.status === 'completed')
   const name = profile?.full_name?.split(' ')[0] || 'there'
-
-  const formatDate = (d) => new Date(d + 'T00:00:00').toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' })
-  const formatTime = (t) => { const [h,m] = t.split(':'); const hr = parseInt(h); return `${hr > 12 ? hr-12 : hr}:${m} ${hr >= 12 ? 'PM' : 'AM'}` }
 
   return (
     <div className="space-y-6">

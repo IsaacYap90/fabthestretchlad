@@ -24,7 +24,7 @@ export default function Signup() {
     navigate('/login')
   }
 
-  const inputClass = "w-full bg-white/5 border border-[#262626] focus:border-red-600/50 rounded-xl px-4 py-3 text-white text-sm outline-none transition-colors"
+  const inputClass = "w-full bg-white/5 border border-[#262626] focus:border-red-600/50 rounded-xl px-4 py-3 text-white text-sm outline-none focus-visible:ring-2 focus-visible:ring-red-600/50 transition-colors"
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center p-4">
@@ -46,36 +46,36 @@ export default function Signup() {
           )}
 
           <div>
-            <label className="text-gray-400 text-xs uppercase tracking-wider font-semibold mb-1.5 block">Full Name *</label>
-            <input type="text" required value={form.fullName} onChange={e => setForm({...form, fullName: e.target.value})}
+            <label htmlFor="signup-name" className="text-gray-400 text-xs uppercase tracking-wider font-semibold mb-1.5 block">Full Name *</label>
+            <input id="signup-name" type="text" required value={form.fullName} onChange={e => setForm({...form, fullName: e.target.value})}
               className={inputClass} placeholder="John Doe" />
           </div>
 
           <div>
-            <label className="text-gray-400 text-xs uppercase tracking-wider font-semibold mb-1.5 block">Email *</label>
-            <input type="email" required value={form.email} onChange={e => setForm({...form, email: e.target.value})}
+            <label htmlFor="signup-email" className="text-gray-400 text-xs uppercase tracking-wider font-semibold mb-1.5 block">Email *</label>
+            <input id="signup-email" type="email" required value={form.email} onChange={e => setForm({...form, email: e.target.value})}
               className={inputClass} placeholder="you@email.com" />
           </div>
 
           <div>
-            <label className="text-gray-400 text-xs uppercase tracking-wider font-semibold mb-1.5 block">Phone</label>
-            <input type="tel" value={form.phone} onChange={e => setForm({...form, phone: e.target.value})}
+            <label htmlFor="signup-phone" className="text-gray-400 text-xs uppercase tracking-wider font-semibold mb-1.5 block">Phone</label>
+            <input id="signup-phone" type="tel" value={form.phone} onChange={e => setForm({...form, phone: e.target.value})}
               className={inputClass} placeholder="+60 12 345 6789" />
           </div>
 
           <div>
-            <label className="text-gray-400 text-xs uppercase tracking-wider font-semibold mb-1.5 block">Password *</label>
-            <input type="password" required value={form.password} onChange={e => setForm({...form, password: e.target.value})}
+            <label htmlFor="signup-password" className="text-gray-400 text-xs uppercase tracking-wider font-semibold mb-1.5 block">Password *</label>
+            <input id="signup-password" type="password" required value={form.password} onChange={e => setForm({...form, password: e.target.value})}
               className={inputClass} placeholder="Min 6 characters" />
           </div>
 
           <div>
-            <label className="text-gray-400 text-xs uppercase tracking-wider font-semibold mb-1.5 block">Confirm Password *</label>
-            <input type="password" required value={form.confirmPassword} onChange={e => setForm({...form, confirmPassword: e.target.value})}
+            <label htmlFor="signup-confirm" className="text-gray-400 text-xs uppercase tracking-wider font-semibold mb-1.5 block">Confirm Password *</label>
+            <input id="signup-confirm" type="password" required value={form.confirmPassword} onChange={e => setForm({...form, confirmPassword: e.target.value})}
               className={inputClass} placeholder="Repeat password" />
           </div>
 
-          {error && <p className="text-red-400 text-sm">{error}</p>}
+          {error && <p className="text-red-400 text-sm" role="alert">{error}</p>}
 
           <Button type="submit" disabled={loading || !isSupabaseConfigured()} className="w-full">
             {loading ? 'Creating account...' : 'Sign Up'}

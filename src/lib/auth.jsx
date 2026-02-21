@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useState, useCallback } from 'react'
 import { supabase, isSupabaseConfigured } from './supabase'
 
 const AuthContext = createContext({})
@@ -25,9 +25,9 @@ const DEMO_PROFILES = {
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
   const [profile, setProfile] = useState(null)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(() => isSupabaseConfigured())
 
-  const fetchProfile = async (userId) => {
+  const fetchProfile = useCallback(async (userId) => {
     if (!isSupabaseConfigured()) {
       setProfile(DEMO_PROFILES[userId] || null)
       return DEMO_PROFILES[userId] || null
@@ -35,13 +35,10 @@ export function AuthProvider({ children }) {
     const { data } = await supabase.from('profiles').select('*').eq('id', userId).single()
     setProfile(data)
     return data
-  }
+  }, [])
 
   useEffect(() => {
-    if (!isSupabaseConfigured()) {
-      setLoading(false)
-      return
-    }
+    if (!isSupabaseConfigured()) return
 
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null)
@@ -56,7 +53,7 @@ export function AuthProvider({ children }) {
     })
 
     return () => subscription.unsubscribe()
-  }, [])
+  }, [fetchProfile])
 
   const signIn = async (email, password) => {
     if (!isSupabaseConfigured()) {
@@ -97,4 +94,5 @@ export function AuthProvider({ children }) {
   )
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => useContext(AuthContext)

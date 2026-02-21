@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../lib/auth'
 import { supabase, isSupabaseConfigured } from '../../lib/supabase'
 import { DEMO_SLOTS, DEMO_PACKAGE } from '../../lib/demo-data'
+import { formatDateFull, formatTime } from '../../lib/format'
 import Card from '../../components/ui/Card'
 import Button from '../../components/ui/Button'
 import Calendar from '../../components/booking/Calendar'
@@ -21,32 +22,32 @@ export default function BookSession() {
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState('')
 
-  useEffect(() => {
-    loadPackage()
-    loadSlots()
-  }, [])
-
-  useEffect(() => {
-    if (selectedDate) loadBookedSlots(selectedDate)
-  }, [selectedDate])
-
-  const loadPackage = async () => {
+  const loadPackage = useCallback(async () => {
     if (!isSupabaseConfigured()) { setPkg(DEMO_PACKAGE); return }
     const { data } = await supabase.from('client_packages').select('*, packages(*)').eq('client_id', user.id).eq('status', 'active').order('created_at', { ascending: false }).limit(1).single()
     setPkg(data)
-  }
+  }, [user])
 
-  const loadSlots = async () => {
+  const loadSlots = useCallback(async () => {
     if (!isSupabaseConfigured()) { setSlots(DEMO_SLOTS); return }
     const { data } = await supabase.from('available_slots').select('*').eq('is_available', true)
     setSlots(data || [])
-  }
+  }, [])
 
-  const loadBookedSlots = async (date) => {
+  const loadBookedSlots = useCallback(async (date) => {
     if (!isSupabaseConfigured()) { setBookedSlots([]); return }
     const { data } = await supabase.from('bookings').select('start_time, end_time').eq('date', date).in('status', ['confirmed'])
     setBookedSlots(data || [])
-  }
+  }, [])
+
+  useEffect(() => {
+    loadPackage()
+    loadSlots()
+  }, [loadPackage, loadSlots])
+
+  useEffect(() => {
+    if (selectedDate) loadBookedSlots(selectedDate)
+  }, [selectedDate, loadBookedSlots])
 
   const getSlotsForDate = () => {
     if (!selectedDate) return []
@@ -54,8 +55,11 @@ export default function BookSession() {
     return slots.filter(s => s.day_of_week === dayOfWeek).sort((a,b) => a.start_time.localeCompare(b.start_time))
   }
 
+  const canBook = pkg && pkg.sessions_remaining > 0
+
   const handleBook = async () => {
     if (!selectedDate || !selectedSlot) return
+    if (!canBook) { setError('No sessions remaining. Contact Fab to top up your package.'); return }
     setSubmitting(true)
     setError('')
 
@@ -83,9 +87,6 @@ export default function BookSession() {
     setSubmitting(false)
   }
 
-  const formatDate = (d) => new Date(d + 'T00:00:00').toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
-  const formatTime = (t) => { const [h,m] = t.split(':'); const hr = parseInt(h); return `${hr > 12 ? hr-12 : hr}:${m} ${hr >= 12 ? 'PM' : 'AM'}` }
-
   if (success) {
     return (
       <div className="max-w-md mx-auto text-center py-12">
@@ -93,7 +94,7 @@ export default function BookSession() {
           <span className="text-green-500 text-2xl">✓</span>
         </div>
         <h2 className="text-2xl font-bold text-white mb-2">Session Booked!</h2>
-        <p className="text-gray-400 mb-2">{formatDate(selectedDate)}</p>
+        <p className="text-gray-400 mb-2">{formatDateFull(selectedDate)}</p>
         <p className="text-red-400 font-semibold">{formatTime(selectedSlot.start_time)} – {formatTime(selectedSlot.end_time)}</p>
         <div className="flex gap-3 justify-center mt-8">
           <Button onClick={() => navigate('/portal')}>Back to Dashboard</Button>
@@ -116,6 +117,12 @@ export default function BookSession() {
         </div>
       )}
 
+      {pkg && pkg.sessions_remaining <= 0 && (
+        <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4">
+          <p className="text-red-400 text-sm">All sessions used. Contact Fab to top up your package before booking.</p>
+        </div>
+      )}
+
       <div className="grid md:grid-cols-2 gap-6">
         <Card>
           <h3 className="text-white font-semibold mb-4">Select Date</h3>
@@ -124,7 +131,7 @@ export default function BookSession() {
 
         <Card>
           <h3 className="text-white font-semibold mb-4">
-            {selectedDate ? `Available Times — ${formatDate(selectedDate)}` : 'Select a date first'}
+            {selectedDate ? `Available Times — ${formatDateFull(selectedDate)}` : 'Select a date first'}
           </h3>
           {selectedDate ? (
             <TimeSlots slots={getSlotsForDate()} selectedSlot={selectedSlot} onSelectSlot={setSelectedSlot} bookedSlots={bookedSlots} />
@@ -140,7 +147,7 @@ export default function BookSession() {
           <div className="grid grid-cols-2 gap-4 mb-4">
             <div>
               <p className="text-gray-500 text-xs">Date</p>
-              <p className="text-white text-sm font-semibold">{formatDate(selectedDate)}</p>
+              <p className="text-white text-sm font-semibold">{formatDateFull(selectedDate)}</p>
             </div>
             <div>
               <p className="text-gray-500 text-xs">Time</p>
@@ -148,15 +155,16 @@ export default function BookSession() {
             </div>
           </div>
           <div className="mb-4">
-            <label className="text-gray-400 text-xs uppercase tracking-wider font-semibold mb-1.5 block">Notes (optional)</label>
+            <label htmlFor="booking-notes" className="text-gray-400 text-xs uppercase tracking-wider font-semibold mb-1.5 block">Notes (optional)</label>
             <textarea
+              id="booking-notes"
               value={notes} onChange={e => setNotes(e.target.value)}
-              className="w-full bg-white/5 border border-[#262626] focus:border-red-600/50 rounded-xl px-4 py-3 text-white text-sm outline-none resize-none"
+              className="w-full bg-white/5 border border-[#262626] focus:border-red-600/50 rounded-xl px-4 py-3 text-white text-sm outline-none focus-visible:ring-2 focus-visible:ring-red-600/50 resize-none"
               rows={2} placeholder="E.g. Focus on hip flexors today"
             />
           </div>
-          {error && <p className="text-red-400 text-sm mb-3">{error}</p>}
-          <Button onClick={handleBook} disabled={submitting} className="w-full">
+          {error && <p className="text-red-400 text-sm mb-3" role="alert">{error}</p>}
+          <Button onClick={handleBook} disabled={submitting || !canBook} className="w-full">
             {submitting ? 'Booking...' : 'Confirm Booking'}
           </Button>
         </Card>

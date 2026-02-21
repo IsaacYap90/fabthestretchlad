@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase, isSupabaseConfigured } from '../../lib/supabase'
 import { DEMO_CLIENTS } from '../../lib/demo-data'
@@ -11,9 +11,7 @@ export default function AdminClients() {
   const [search, setSearch] = useState('')
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => { loadClients() }, [])
-
-  const loadClients = async () => {
+  const loadClients = useCallback(async () => {
     if (!isSupabaseConfigured()) {
       setClients(DEMO_CLIENTS)
       setLoading(false)
@@ -22,7 +20,11 @@ export default function AdminClients() {
     const { data } = await supabase.from('profiles').select('*, client_packages(*), gamification(*)').eq('role', 'client').order('full_name')
     setClients(data || [])
     setLoading(false)
-  }
+  }, [])
+
+  useEffect(() => {
+    loadClients() // eslint-disable-line react-hooks/set-state-in-effect
+  }, [loadClients])
 
   const filtered = clients.filter(c =>
     c.full_name.toLowerCase().includes(search.toLowerCase()) ||

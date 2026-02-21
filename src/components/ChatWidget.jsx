@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 
-const GREETING = "Hey! 💪 I'm Fab's AI assistant. Tell me what's bothering you — tight shoulders? Back pain? I'll recommend the perfect stretch session for you."
+const GREETING = "Hey! I'm Fab's AI assistant. Tell me what's bothering you — tight shoulders? Back pain? I'll recommend the perfect stretch session for you."
 
 export default function ChatWidget() {
   const [open, setOpen] = useState(false)
@@ -23,7 +23,6 @@ export default function ChatWidget() {
     setLoading(true)
 
     try {
-      // Send only role/content pairs (exclude greeting which is local-only)
       const apiMessages = updated
         .filter((_, i) => i > 0 || updated[0].role === 'user')
         .map(({ role, content }) => ({ role, content }))
@@ -49,6 +48,9 @@ export default function ChatWidget() {
         className={`fixed bottom-24 right-4 sm:right-6 z-50 w-[calc(100vw-2rem)] sm:w-[380px] transition-all duration-300 origin-bottom-right ${
           open ? 'scale-100 opacity-100 pointer-events-auto' : 'scale-95 opacity-0 pointer-events-none'
         }`}
+        role="dialog"
+        aria-label="Chat with Fab's AI Assistant"
+        aria-hidden={!open}
       >
         <div className="bg-[#1a1a1a] border border-white/10 rounded-2xl shadow-2xl shadow-black/50 flex flex-col overflow-hidden" style={{ maxHeight: 'min(500px, calc(100vh - 160px))' }}>
           {/* Header */}
@@ -57,10 +59,12 @@ export default function ChatWidget() {
               <div className="w-8 h-8 rounded-full bg-red-600 flex items-center justify-center text-white text-sm font-black">F</div>
               <div>
                 <p className="text-white text-sm font-bold leading-tight">Fab's AI Assistant</p>
-                <p className="text-green-500 text-[10px]">● Online</p>
+                <p className="text-green-500 text-[10px]">Online</p>
               </div>
             </div>
-            <button onClick={() => setOpen(false)} className="text-neutral-500 hover:text-white transition-colors text-xl leading-none p-1">✕</button>
+            <button onClick={() => setOpen(false)} className="text-neutral-500 hover:text-white transition-colors text-xl leading-none p-1 focus-visible:ring-2 focus-visible:ring-red-400 rounded" aria-label="Close chat">
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
           </div>
 
           {/* Messages */}
@@ -79,7 +83,7 @@ export default function ChatWidget() {
             {loading && (
               <div className="flex justify-start">
                 <div className="bg-white/10 px-4 py-3 rounded-2xl rounded-bl-md">
-                  <div className="flex gap-1">
+                  <div className="flex gap-1" aria-label="Loading response">
                     <span className="w-2 h-2 bg-neutral-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
                     <span className="w-2 h-2 bg-neutral-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
                     <span className="w-2 h-2 bg-neutral-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
@@ -93,22 +97,23 @@ export default function ChatWidget() {
           {/* Input */}
           <div className="px-3 py-3 border-t border-white/10 bg-[#0a0a0a]">
             <form onSubmit={e => { e.preventDefault(); send() }} className="flex gap-2">
+              <label htmlFor="chat-input" className="sr-only">Message</label>
               <input
+                id="chat-input"
                 type="text"
                 value={input}
                 onChange={e => setInput(e.target.value)}
                 placeholder="Ask about stretch therapy..."
-                className="flex-1 bg-white/5 border border-white/10 focus:border-red-600/50 rounded-xl px-3.5 py-2.5 text-white text-sm placeholder:text-neutral-600 outline-none transition-colors"
+                className="flex-1 bg-white/5 border border-white/10 focus:border-red-600/50 rounded-xl px-3.5 py-2.5 text-white text-sm placeholder:text-neutral-600 outline-none focus-visible:ring-2 focus-visible:ring-red-600/50 transition-colors"
               />
               <button
                 type="submit"
                 disabled={loading || !input.trim()}
-                className="px-4 py-2.5 bg-red-600 hover:bg-red-700 disabled:bg-red-600/30 text-white rounded-xl transition-colors text-sm font-bold"
+                className="px-4 py-2.5 bg-red-600 hover:bg-red-700 disabled:bg-red-600/30 text-white rounded-xl transition-colors text-sm font-bold focus-visible:ring-2 focus-visible:ring-red-400"
               >
                 Send
               </button>
             </form>
-            <p className="text-center text-neutral-600 text-[10px] mt-2">🤖 AI-Powered by ChatGPT</p>
           </div>
         </div>
       </div>
@@ -116,11 +121,12 @@ export default function ChatWidget() {
       {/* Floating Button */}
       <button
         onClick={() => setOpen(o => !o)}
-        className={`fixed bottom-6 right-4 sm:right-6 z-50 px-5 py-3.5 bg-red-600 hover:bg-red-700 text-white font-bold rounded-full shadow-lg shadow-red-600/20 transition-all duration-300 flex items-center gap-2 text-sm ${
+        aria-label={open ? 'Close chat' : 'Open chat with Fab\'s AI'}
+        className={`fixed bottom-6 right-4 sm:right-6 z-50 px-5 py-3.5 bg-red-600 hover:bg-red-700 text-white font-bold rounded-full shadow-lg shadow-red-600/20 transition-all duration-300 flex items-center gap-2 text-sm focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a0a0a] ${
           open ? 'scale-90 opacity-80' : 'scale-100'
         }`}
       >
-        {open ? '✕ Close' : '💬 Ask Fab\'s AI'}
+        {open ? 'Close' : 'Ask Fab\'s AI'}
       </button>
     </>
   )

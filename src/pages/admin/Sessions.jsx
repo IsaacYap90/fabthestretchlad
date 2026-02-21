@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { supabase, isSupabaseConfigured } from '../../lib/supabase'
 import { DEMO_ADMIN_BOOKINGS } from '../../lib/demo-data'
+import { formatDate, formatTime } from '../../lib/format'
 import Card from '../../components/ui/Card'
 import Badge from '../../components/ui/Badge'
 import Button from '../../components/ui/Button'
@@ -16,9 +17,7 @@ export default function AdminSessions() {
   const [submitting, setSubmitting] = useState(false)
   const [filter, setFilter] = useState('confirmed')
 
-  useEffect(() => { loadBookings() }, [])
-
-  const loadBookings = async () => {
+  const loadBookings = useCallback(async () => {
     if (!isSupabaseConfigured()) {
       setBookings(DEMO_ADMIN_BOOKINGS)
       setLoading(false)
@@ -27,7 +26,11 @@ export default function AdminSessions() {
     const { data } = await supabase.from('bookings').select('*, profiles(full_name), session_logs(*)').order('date', { ascending: false }).limit(50)
     setBookings(data || [])
     setLoading(false)
-  }
+  }, [])
+
+  useEffect(() => {
+    loadBookings() // eslint-disable-line react-hooks/set-state-in-effect
+  }, [loadBookings])
 
   const handleComplete = async () => {
     setSubmitting(true)
@@ -60,9 +63,7 @@ export default function AdminSessions() {
   const toggleArea = (a) => setForm(f => ({ ...f, areas: f.areas.includes(a) ? f.areas.filter(x => x !== a) : [...f.areas, a] }))
 
   const filtered = bookings.filter(b => filter === 'all' || b.status === filter)
-  const formatDate = (d) => new Date(d + 'T00:00:00').toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' })
-  const formatTime = (t) => { const [h,m] = t.split(':'); const hr = parseInt(h); return `${hr > 12 ? hr-12 : hr}:${m} ${hr >= 12 ? 'PM' : 'AM'}` }
-  const inputClass = "w-full bg-white/5 border border-[#262626] focus:border-red-600/50 rounded-xl px-4 py-3 text-white text-sm outline-none"
+  const inputClass = "w-full bg-white/5 border border-[#262626] focus:border-red-600/50 rounded-xl px-4 py-3 text-white text-sm outline-none focus-visible:ring-2 focus-visible:ring-red-600/50"
 
   if (loading) return <div className="flex justify-center py-20"><div className="w-8 h-8 border-2 border-red-600 border-t-transparent rounded-full animate-spin" /></div>
 

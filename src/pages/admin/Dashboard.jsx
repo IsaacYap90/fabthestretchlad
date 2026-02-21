@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase, isSupabaseConfigured } from '../../lib/supabase'
 import { DEMO_ADMIN_BOOKINGS, DEMO_CLIENTS } from '../../lib/demo-data'
+import { formatTime } from '../../lib/format'
 import Card from '../../components/ui/Card'
 import Badge from '../../components/ui/Badge'
 
@@ -11,9 +12,7 @@ export default function AdminDashboard() {
   const [stats, setStats] = useState({ activeClients: 0, thisMonth: 0, thisWeek: 0 })
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => { loadData() }, [])
-
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     const today = new Date().toISOString().split('T')[0]
 
     if (!isSupabaseConfigured()) {
@@ -46,13 +45,17 @@ export default function AdminDashboard() {
         thisMonth: monthRes.count || 0,
         thisWeek: weekRes.count || 0,
       })
-    } catch {}
+    } catch (err) {
+      console.error('Failed to load admin dashboard:', err)
+    }
     setLoading(false)
-  }
+  }, [])
+
+  useEffect(() => {
+    loadData() // eslint-disable-line react-hooks/set-state-in-effect
+  }, [loadData])
 
   if (loading) return <div className="flex justify-center py-20"><div className="w-8 h-8 border-2 border-red-600 border-t-transparent rounded-full animate-spin" /></div>
-
-  const formatTime = (t) => { const [h,m] = t.split(':'); const hr = parseInt(h); return `${hr > 12 ? hr-12 : hr}:${m} ${hr >= 12 ? 'PM' : 'AM'}` }
 
   return (
     <div className="space-y-6">

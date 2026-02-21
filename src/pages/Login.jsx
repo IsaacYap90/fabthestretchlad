@@ -16,10 +16,9 @@ export default function Login() {
     e.preventDefault()
     setError('')
     setLoading(true)
-    const { data, error: err } = await signIn(email, password)
+    const { error: err } = await signIn(email, password)
     setLoading(false)
     if (err) { setError(err.message); return }
-    // Navigate after profile loads
     setTimeout(() => navigate('/portal'), 100)
   }
 
@@ -46,24 +45,26 @@ export default function Login() {
           )}
 
           <div>
-            <label className="text-gray-400 text-xs uppercase tracking-wider font-semibold mb-1.5 block">Email</label>
+            <label htmlFor="login-email" className="text-gray-400 text-xs uppercase tracking-wider font-semibold mb-1.5 block">Email</label>
             <input
+              id="login-email"
               type="email" required value={email} onChange={e => setEmail(e.target.value)}
-              className="w-full bg-white/5 border border-[#262626] focus:border-red-600/50 rounded-xl px-4 py-3 text-white text-sm outline-none transition-colors"
+              className="w-full bg-white/5 border border-[#262626] focus:border-red-600/50 rounded-xl px-4 py-3 text-white text-sm outline-none focus-visible:ring-2 focus-visible:ring-red-600/50 transition-colors"
               placeholder="you@email.com"
             />
           </div>
 
           <div>
-            <label className="text-gray-400 text-xs uppercase tracking-wider font-semibold mb-1.5 block">Password</label>
+            <label htmlFor="login-password" className="text-gray-400 text-xs uppercase tracking-wider font-semibold mb-1.5 block">Password</label>
             <input
+              id="login-password"
               type="password" required value={password} onChange={e => setPassword(e.target.value)}
-              className="w-full bg-white/5 border border-[#262626] focus:border-red-600/50 rounded-xl px-4 py-3 text-white text-sm outline-none transition-colors"
+              className="w-full bg-white/5 border border-[#262626] focus:border-red-600/50 rounded-xl px-4 py-3 text-white text-sm outline-none focus-visible:ring-2 focus-visible:ring-red-600/50 transition-colors"
               placeholder="••••••••"
             />
           </div>
 
-          {error && <p className="text-red-400 text-sm">{error}</p>}
+          {error && <p className="text-red-400 text-sm" role="alert">{error}</p>}
 
           <Button type="submit" disabled={loading} className="w-full">
             {loading ? 'Signing in...' : 'Sign In'}

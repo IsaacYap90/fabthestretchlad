@@ -1,6 +1,8 @@
 // Vercel Serverless Function — sends confirmation email for Fab bookings
 import nodemailer from "nodemailer";
 
+const API_SECRET = process.env.API_SECRET;
+
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 587,
@@ -10,6 +12,16 @@ const transporter = nodemailer.createTransport({
     pass: process.env.SMTP_PASS,
   },
 });
+
+function escapeHtml(str) {
+  if (!str) return "";
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
 
 function googleCalendarLink(booking) {
   const date = (booking.preferred_date || "").replace(/-/g, "");
@@ -55,6 +67,11 @@ function generateICSContent(booking) {
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
 
+  // Verify request authenticity
+  if (API_SECRET && req.headers["x-api-secret"] !== API_SECRET) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
   try {
     const booking = req.body;
     if (!booking.email) return res.status(400).json({ error: "No email" });
@@ -65,6 +82,12 @@ export default async function handler(req, res) {
       : "To be confirmed";
     const gcalLink = googleCalendarLink(booking);
 
+    const safeName = escapeHtml(booking.name);
+    const safeTime = escapeHtml(booking.preferred_time) || "To be confirmed";
+    const safeIssue = escapeHtml(booking.issue_area) || "General";
+    const safeDesc = escapeHtml(booking.description) || "—";
+    const safeDateFormatted = escapeHtml(dateFormatted);
+
     const html = `
 <!DOCTYPE html>
 <html>
@@ -74,7 +97,6 @@ export default async function handler(req, res) {
   <div style="background:#1a1a1a;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.1);">
     <!-- Header -->
     <div style="background:#dc2626;padding:32px 24px;text-align:center;">
-      <span style="font-size:32px;">💆</span>
       <h1 style="color:#fff;margin:8px 0 0;font-size:28px;font-weight:900;">FAB</h1>
       <p style="color:rgba(255,255,255,0.7);margin:2px 0 0;font-size:10px;letter-spacing:3px;text-transform:uppercase;">The Stretch Lad</p>
     </div>
@@ -82,20 +104,18 @@ export default async function handler(req, res) {
     <!-- Body -->
     <div style="padding:32px 24px;">
       <div style="text-align:center;margin-bottom:24px;">
-        <div style="width:56px;height:56px;border-radius:50%;border:2px solid #dc2626;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;">
-          <span style="color:#dc2626;font-size:28px;">✓</span>
-        </div>
-        <h2 style="color:#fff;margin:0 0 8px;font-size:24px;">Booking Confirmed!</h2>
-        <p style="color:#a3a3a3;margin:0;font-size:14px;">Reference: <strong style="color:#dc2626;">#${refId}</strong></p>
+        <h2 style="color:#fff;margin:0 0 8px;font-size:24px;">Booking Received!</h2>
+        <p style="color:#a3a3a3;margin:0;font-size:14px;">Reference: <strong style="color:#dc2626;">#${escapeHtml(refId)}</strong></p>
       </div>
 
       <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:20px;margin-bottom:24px;">
         <table style="width:100%;border-collapse:collapse;">
-          <tr><td style="padding:8px 0;color:#a3a3a3;font-size:13px;width:120px;">📅 Date</td><td style="padding:8px 0;color:#fff;font-size:14px;font-weight:600;">${dateFormatted}</td></tr>
-          <tr><td style="padding:8px 0;color:#a3a3a3;font-size:13px;">⏰ Time</td><td style="padding:8px 0;color:#fff;font-size:14px;font-weight:600;">${booking.preferred_time || "To be confirmed"}</td></tr>
-          <tr><td style="padding:8px 0;color:#a3a3a3;font-size:13px;">📍 Location</td><td style="padding:8px 0;color:#fff;font-size:14px;font-weight:600;">Singapore (Mobile)</td></tr>
-          <tr><td style="padding:8px 0;color:#a3a3a3;font-size:13px;">🎯 Issue Area</td><td style="padding:8px 0;color:#fff;font-size:14px;">${booking.issue_area || "General"}</td></tr>
-          <tr><td style="padding:8px 0;color:#a3a3a3;font-size:13px;">✏️ Details</td><td style="padding:8px 0;color:#fff;font-size:14px;">${booking.description || "—"}</td></tr>
+          <tr><td style="padding:8px 0;color:#a3a3a3;font-size:13px;width:120px;">Name</td><td style="padding:8px 0;color:#fff;font-size:14px;font-weight:600;">${safeName}</td></tr>
+          <tr><td style="padding:8px 0;color:#a3a3a3;font-size:13px;">Date</td><td style="padding:8px 0;color:#fff;font-size:14px;font-weight:600;">${safeDateFormatted}</td></tr>
+          <tr><td style="padding:8px 0;color:#a3a3a3;font-size:13px;">Time</td><td style="padding:8px 0;color:#fff;font-size:14px;font-weight:600;">${safeTime}</td></tr>
+          <tr><td style="padding:8px 0;color:#a3a3a3;font-size:13px;">Location</td><td style="padding:8px 0;color:#fff;font-size:14px;font-weight:600;">Singapore (Mobile)</td></tr>
+          <tr><td style="padding:8px 0;color:#a3a3a3;font-size:13px;">Issue Area</td><td style="padding:8px 0;color:#fff;font-size:14px;">${safeIssue}</td></tr>
+          <tr><td style="padding:8px 0;color:#a3a3a3;font-size:13px;">Details</td><td style="padding:8px 0;color:#fff;font-size:14px;">${safeDesc}</td></tr>
         </table>
       </div>
 
@@ -105,7 +125,7 @@ export default async function handler(req, res) {
 
       <div style="text-align:center;">
         <a href="${gcalLink}" target="_blank" style="display:inline-block;background:#dc2626;color:#fff;padding:12px 24px;border-radius:24px;text-decoration:none;font-size:14px;font-weight:700;">
-          📅 Add to Google Calendar
+          Add to Google Calendar
         </a>
       </div>
     </div>
@@ -126,7 +146,7 @@ export default async function handler(req, res) {
     await transporter.sendMail({
       from: '"Fab The Stretch Lad" <hello@isaacyap.ai>',
       to: booking.email,
-      subject: `✅ Booking Confirmed — Fab The Stretch Lad #${refId}`,
+      subject: `Booking Received — Fab The Stretch Lad #${escapeHtml(refId)}`,
       html,
       icalEvent: { method: "REQUEST", content: icsContent },
     });

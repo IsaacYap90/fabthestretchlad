@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { supabase, isSupabaseConfigured } from '../../lib/supabase'
 import { DEMO_CLIENTS, DEMO_BOOKINGS, DEMO_PACKAGES_LIST } from '../../lib/demo-data'
+import { formatDateLong } from '../../lib/format'
 import Card from '../../components/ui/Card'
 import Badge from '../../components/ui/Badge'
 import Button from '../../components/ui/Button'
@@ -20,11 +21,9 @@ export default function ClientDetail() {
   const [selectedPkg, setSelectedPkg] = useState('')
   const [activating, setActivating] = useState(false)
 
-  useEffect(() => { loadData() }, [id])
-
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     if (!isSupabaseConfigured()) {
-      const c = DEMO_CLIENTS.find(c => c.id === id) || DEMO_CLIENTS[0]
+      const c = DEMO_CLIENTS.find(cl => cl.id === id) || DEMO_CLIENTS[0]
       setClient(c)
       setBookings(DEMO_BOOKINGS)
       setPackages(DEMO_PACKAGES_LIST)
@@ -40,7 +39,10 @@ export default function ClientDetail() {
     setBookings(bookingsRes.data || [])
     setPackages(pkgRes.data || [])
     setLoading(false)
-  }
+  }, [id])
+
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { loadData() }, [loadData])
 
   const handleActivate = async () => {
     if (!selectedPkg) return
@@ -69,12 +71,11 @@ export default function ClientDetail() {
   const activePkg = client.client_packages?.find(p => p.status === 'active')
   const gam = client.gamification?.[0]
   const completed = bookings.filter(b => b.status === 'completed')
-  const formatDate = (d) => new Date(d + 'T00:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
 
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-3">
-        <Link to="/admin/clients" className="text-gray-500 hover:text-white">←</Link>
+        <Link to="/admin/clients" className="text-gray-500 hover:text-white" aria-label="Back to clients">←</Link>
         <h1 className="text-2xl font-bold text-white">{client.full_name}</h1>
       </div>
 
@@ -126,7 +127,7 @@ export default function ClientDetail() {
           <Card key={b.id} className="!p-4">
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-white text-sm font-semibold">{formatDate(b.date)}</p>
+                <p className="text-white text-sm font-semibold">{formatDateLong(b.date)}</p>
                 {b.session_logs?.[0] && (
                   <>
                     <p className="text-gray-400 text-xs mt-1">{b.session_logs[0].areas_worked?.join(', ')}</p>
@@ -139,7 +140,7 @@ export default function ClientDetail() {
               {b.session_logs?.[0]?.pain_level_before != null && (
                 <span className="text-xs">
                   <span className="text-red-400">{b.session_logs[0].pain_level_before}</span>
-                  →
+                  {' → '}
                   <span className="text-green-400">{b.session_logs[0].pain_level_after}</span>
                 </span>
               )}
